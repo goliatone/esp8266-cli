@@ -133,7 +133,14 @@ var commands = {
 		new SerialComms(port).on('ready', function (comms) {
 			comms.monitor();
 		});
-  	}
+  	},
+	fsinfo: function(){
+		new SerialComms(port).on('ready', function(comms){
+			new DeviceManager(comms).fsinfo()
+				.then(console.log)
+				.then(comms.close.bind(comms));
+ 		});
+	}
 };
 
 module.exports = commands;

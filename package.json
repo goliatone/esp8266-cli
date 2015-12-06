@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "clean-css": "^3.0.7",
+    "commander": "^2.9.0",
     "es6-promise": "^2.0.0",
     "html-minifier": "^0.6.9",
     "luamin": "^0.2.8",

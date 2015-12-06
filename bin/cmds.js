@@ -5,7 +5,6 @@ var fs = require('fs'),
 	DeviceManager = require('../src/DeviceManager'),
 	PORT_FILENAME = __dirname + '/port.txt';
 
-
 var args = process.argv.slice(2),
 	port,
 	success;
@@ -31,13 +30,13 @@ var commands = {
 		},
 		list: function(){
 			require('serialport').list(function(err, ports){
-				console.log(ports)
+				console.log(ports);
 			});
 		}
 	},
 	file: {
 		list: function () {
-			new SerialComms(port).on('ready', function (comms) {
+			return new SerialComms(port).on('ready', function (comms) {
 				new DeviceManager(comms).getFileList()
 					.then(function (files) {
 						for (var i = 0, file; file = files[i]; i++) {
@@ -50,7 +49,7 @@ var commands = {
 			});
 		},
 		remove: function (filename) {
-			new SerialComms(port).on('ready', function (comms) {
+			return new SerialComms(port).on('ready', function (comms) {
 				new DeviceManager(comms).removeFile(filename)
 					.then(comms.close.bind(comms));
 			});
@@ -97,13 +96,13 @@ var commands = {
 				}
 			}
 
-			new SerialComms(port).on('ready', function (comms) {
+			return new SerialComms(port).on('ready', function (comms) {
 				new DeviceManager(comms).writeFile(basename, data)
 					.then(comms.close.bind(comms));
 			});
 		},
 		read: function (filename) {
-			new SerialComms(port).on('ready', function (comms) {
+			return new SerialComms(port).on('ready', function (comms) {
 				new DeviceManager(comms).readFile(filename)
 					.then(function (data) { return data.replace(/\r\n\r\n/g, '\n'); })
 					.then(console.log)
@@ -111,7 +110,7 @@ var commands = {
 			});
 		},
 		execute: function (filename) {
-			new SerialComms(port).on('ready', function (comms) {
+			return new SerialComms(port).on('ready', function (comms) {
 				new DeviceManager(comms).executeFile(filename)
 					.then(console.log)
 					.then(comms.close.bind(comms));
@@ -119,13 +118,13 @@ var commands = {
 		}
 	},
 	restart: function () {
-		new SerialComms(port).on('ready', function (comms) {
+		return new SerialComms(port).on('ready', function (comms) {
 			new DeviceManager(comms).restart()
 				.then(comms.close.bind(comms));
 		});
 	},
 	run: function (lua) {
-		new SerialComms(port).on('ready', function (comms) {
+		return new SerialComms(port).on('ready', function (comms) {
 			new DeviceManager(comms).executeLua(lua)
 				.then(console.log)
 				.then(comms.close.bind(comms));
@@ -135,12 +134,12 @@ var commands = {
 		console.log("Displaying output from port " + port + ".");
 		console.log("Press ^C to stop.\n");
 
-		new SerialComms(port).on('ready', function (comms) {
+		return new SerialComms(port).on('ready', function (comms) {
 			comms.monitor();
 		});
   	},
 	fsinfo: function(){
-		new SerialComms(port).on('ready', function(comms){
+		return new SerialComms(port).on('ready', function(comms){
 			new DeviceManager(comms).fsinfo()
 				.then(console.log)
 				.then(comms.close.bind(comms));
@@ -148,28 +147,28 @@ var commands = {
 	},
 	info: {
 		heap: function(){
-			new SerialComms(port).on('ready', function(comms){
+			return new SerialComms(port).on('ready', function(comms){
 				new DeviceManager(comms).infoHeap()
 					.then(console.log)
 					.then(comms.close.bind(comms));
 	 		});
 		},
-		flashId: function(){
-			new SerialComms(port).on('ready', function(comms){
+		flash: function(){
+			return new SerialComms(port).on('ready', function(comms){
 				new DeviceManager(comms).infoFlashId()
 					.then(console.log)
 					.then(comms.close.bind(comms));
 	 		});
 		},
 		build: function(){
-			new SerialComms(port).on('ready', function(comms){
+			return new SerialComms(port).on('ready', function(comms){
 				new DeviceManager(comms).infoBuild()
 					.then(console.log)
 					.then(comms.close.bind(comms));
 	 		});
 		},
-		chipId: function(){
-			new SerialComms(port).on('ready', function(comms){
+		chip: function(){
+			return new SerialComms(port).on('ready', function(comms){
 				new DeviceManager(comms).infoChipId()
 					.then(console.log)
 					.then(comms.close.bind(comms));

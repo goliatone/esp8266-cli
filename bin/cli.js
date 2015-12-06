@@ -13,6 +13,7 @@ var port = 'getport',
 
 program
 	.option('-v, --verbose')
+	.option('-r, --raw')
 	.version(pkg.version);
 
 
@@ -51,21 +52,27 @@ program
 		}
 		//TODO should we take "write -c" option? compile?
 		//it would load the file, compile it and remove the lua?
-		commands.file[cmd](filename, destination);
+		commands.file[cmd](filename, destination).then(function(res){
+			console.log(res)
+		});
 	});
 
 program
 	.command('restart')
 	.description('Restarts the board.')
 	.action(function(){
-		commands.restart();
+		commands.restart().then(function(){
+			console.log('Board restarted');
+		});
 	});
 
 program
 	.command('run [lua]')
 	.description('Runs the [lua] command')
 	.action(function(lua){
-		commands.run(lua);
+		commands.run(lua).then(function(res){
+			console.log(res);
+		});
 	});
 
 program
@@ -79,7 +86,9 @@ program
 	.command('fsinfo')
 	.description('Shows information about the file system.')
 	.action(function(cmd){
-		commands.fsinfo();
+		commands.fsinfo().then(function(res){
+			console.log(res)
+		});
 	});
 
 program
@@ -89,7 +98,9 @@ program
 		if(! commands.info.hasOwnProperty(cmd)){
 			unrecognizedCommand('Unrecognized command ' + cmd);
 		}
-		commands.info[cmd]();
+		commands.info[cmd]().then(function(res){
+			console.log(res)
+		});
 	});
 
 

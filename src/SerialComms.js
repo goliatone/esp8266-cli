@@ -46,20 +46,20 @@ SerialComms.prototype._initPort = function () {
 };
 
 SerialComms.prototype._handlePortOpen = function (err) {
-	if (err) throw new Error('Failed to open port: ' + err);
+	if (err) return this.emit('error', new Error('Failed to open port: ' + err));
 	this.emit('ready', this);
 };
 
 
 SerialComms.prototype.send = function (data) {
-	if (!this._port) throw new Error('Port not open');
+	if (!this._port) return this.emit('error', new Error('Port not open'));
 
 	data = '' + data;
 	this._echoBuffer += data;
 
 	this._port.write(data, function(err) {
-		if (err) throw err;
-	});
+		if (err) this.emit('error', err);
+	}.bind(this));
 };
 
 SerialComms.prototype.close = function () {

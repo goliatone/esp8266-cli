@@ -64,6 +64,7 @@ SerialComms.prototype.send = function (data) {
 
 SerialComms.prototype.close = function () {
 	this._port.close();
+	this.emit('close');
 };
 
 SerialComms.prototype.monitor = function() {

@@ -62,6 +62,8 @@ program
 				commands.file.remove(filename);
 				break;
 			case 'write':
+				//TODO should we take -c option? compile?
+				//it would load the file, compile it and remove the lua?
 				commands.file.write(filename, destination);
 				break;
 			case 'push':
@@ -99,6 +101,30 @@ program
 	.action(function(){
 		commands.monitor();
 	});
+
+program
+	.command('fsinfo')
+	.description('Shows information about the filesistem.')
+	.action(function(cmd){
+		commands.fsinfo();
+	});
+
+// to add
+//node.heap()
+//node.info()
+//node.chipid()
+//node.flashid()
+
+//wifi management
+//node.restore() --Added on 07/04/2015
+
+//Get IP:
+// if wifi.getmode() == 1 then print(wifi.sta.getip()) else print(wifi.ap.getip()) end
+
+//Get mac?
+
+//get list of networks?!
+
 
 // program
 // 	.command('repl')

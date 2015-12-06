@@ -1,6 +1,6 @@
 'use strict';
 
-var Promise = require('es6-promise');
+var Promise = require('es6-promise').Promise;
 
 var CHUNK_SIZE = 128;
 

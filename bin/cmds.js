@@ -28,6 +28,11 @@ var commands = {
 		},
 		get: function () {
 			console.log ('Port:', port || '[not set]');
+		},
+		list: function(){
+			require('serialport').list(function(err, ports){
+				console.log(ports)
+			});
 		}
 	},
 	file: {
@@ -140,6 +145,36 @@ var commands = {
 				.then(console.log)
 				.then(comms.close.bind(comms));
  		});
+	},
+	info: {
+		heap: function(){
+			new SerialComms(port).on('ready', function(comms){
+				new DeviceManager(comms).infoHeap()
+					.then(console.log)
+					.then(comms.close.bind(comms));
+	 		});
+		},
+		flashId: function(){
+			new SerialComms(port).on('ready', function(comms){
+				new DeviceManager(comms).infoFlashId()
+					.then(console.log)
+					.then(comms.close.bind(comms));
+	 		});
+		},
+		build: function(){
+			new SerialComms(port).on('ready', function(comms){
+				new DeviceManager(comms).infoBuild()
+					.then(console.log)
+					.then(comms.close.bind(comms));
+	 		});
+		},
+		chipId: function(){
+			new SerialComms(port).on('ready', function(comms){
+				new DeviceManager(comms).infoChipId()
+					.then(console.log)
+					.then(comms.close.bind(comms));
+	 		});
+		}
 	}
 };
 

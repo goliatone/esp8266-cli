@@ -8,6 +8,10 @@ function DeviceManager (comms) {
 	this._comms = comms;
 }
 
+DeviceManager.prototype.execute = function(cmd, args){
+	return this[cmd].apply(this, args);
+};
+
 DeviceManager.prototype.fsinfo = function(){
 	//TODO: Should we print("["..t..","..u..","..r.."]")
 	var command = 'r,u,t=file.fsinfo() print("Total : "..t.." bytes_NL_Used  : "..u.." bytes_NL_Remain: "..r.." bytes_NL_") r=nil u=nil t=nil';

@@ -24,7 +24,7 @@ program
  */
 program
 	.command('port <cmd> [port]')
-	.description('Manage serial port configuration. Valid <cmd>\'s: get|set')
+	.description('Manage serial port configuration. Valid <cmd>\'s: get|set|list')
 	.action(function(cmd, port, options){
 		//validate command
 		switch (cmd) {
@@ -34,9 +34,11 @@ program
 			case 'set':
 				commands.port.set(port);
 				break;
+			case 'list':
+				commands.port.list();
+				break;
 			default:
-				console.error('Wrong!')
-				process.exit(1);
+				unrecognizedCommand('Unrecognized command ' + cmd);
 		}
 	});
 
@@ -76,8 +78,7 @@ program
 				commands.file.execute(filename, destination);
 				break;
 			default:
-				console.error('Wrong!')
-				process.exit(1);
+				unrecognizedCommand('Unrecognized command ' + cmd);
 		}
 	});
 
@@ -97,23 +98,42 @@ program
 
 program
 	.command('monitor')
-	.description('Shows output from port ' + port + '.\n\nPress ^C to stop.')
+	.description('Shows print statements from port ' + port + '.\n\nPress ^C to stop.')
 	.action(function(){
 		commands.monitor();
 	});
 
 program
 	.command('fsinfo')
-	.description('Shows information about the filesistem.')
+	.description('Shows information about the file system.')
 	.action(function(cmd){
 		commands.fsinfo();
 	});
 
-// to add
-//node.heap()
-//node.info()
-//node.chipid()
-//node.flashid()
+program
+	.command('info <cmd>')
+	.description('Shows different information about the system.')
+	.action(function(cmd){
+		switch (cmd) {
+			case 'heap':
+				commands.info.heap();
+				break;
+			case 'flash':
+				commands.info.flashId();
+				break;
+			case 'build':
+				commands.info.build();
+				break;
+			case 'chip':
+				commands.info.chipId();
+				break;
+			default:
+				unrecognizedCommand('Unrecognized command ' + cmd);
+		}
+	});
+
+
+
 
 //wifi management
 //node.restore() --Added on 07/04/2015
@@ -143,3 +163,8 @@ program
     });
 
 program.parse(process.argv);
+
+function unrecognizedCommand(msg){
+	console.error(msg);
+	process.exit(1);
+}

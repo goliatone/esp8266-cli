@@ -5,8 +5,7 @@
 
 var program = require('commander'),
 	pkg = require('../package'),
-	commands = require('./cmds'),
-	PORT_FILENAME = __dirname + '/port.txt';
+	commands = require('./cmds');
 
 var port = 'getport',
 	success;
@@ -29,7 +28,11 @@ program
 		if(! commands.port.hasOwnProperty(cmd)){
 			unrecognizedCommand('Unrecognized command ' + cmd);
 		}
-		commands.port[cmd](port);
+		commands.port[cmd](port).then(function(res){
+			if(cmd === 'list'){
+				console.log('List', res)
+			} else console.log ('Port:', res);
+		});
 	});
 
 program

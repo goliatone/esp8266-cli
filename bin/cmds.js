@@ -178,21 +178,3 @@ var commands = {
 };
 
 module.exports = commands;
-
-/*
-function execute (config, args) {
-	var prop = config[args.shift()];
-	if (!prop) return false;
-
-	if (typeof prop == 'function') {
-		prop.apply(null, args);
-		return true;
-	}
-
-	return execute(prop, args)
-}
-
-success = execute(config, args);
-
-if (!success) console.log ('Invalid command.');
-*/

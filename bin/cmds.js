@@ -5,28 +5,13 @@ var fs = require('fs'),
 	DeviceManager = require('../src/DeviceManager'),
 	PORT_FILENAME = __dirname + '/port.txt';
 
-var args = process.argv.slice(2),
-	port,
-	success;
-
-
-if (args[0] == 'port' && args[1] == 'set') {
- //NOOP
-}
-else if (!fs.existsSync(PORT_FILENAME)) {
-	console.log ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
-	process.exit();
-} else {
-	port = '' + fs.readFileSync(PORT_FILENAME);
-}
-
 var commands = {
 	port: {
 		set: function (port) {
 			fs.writeFileSync(PORT_FILENAME, port);
 		},
 		get: function () {
-			console.log ('Port:', port || '[not set]');
+			console.log ('Port:', getPort() || '[not set]');
 		},
 		list: function(){
 			require('serialport').list(function(err, ports){
@@ -36,7 +21,8 @@ var commands = {
 	},
 	file: {
 		list: function () {
-			return new SerialComms(port).on('ready', function (comms) {
+			return Command('getFileList', null, true);
+			return new SerialComms(getPort()).on('ready', function (comms) {
 				new DeviceManager(comms).getFileList()
 					.then(function (files) {
 						for (var i = 0, file; file = files[i]; i++) {
@@ -49,20 +35,14 @@ var commands = {
 			});
 		},
 		remove: function (filename) {
-			return new SerialComms(port).on('ready', function (comms) {
-				new DeviceManager(comms).removeFile(filename)
-					.then(comms.close.bind(comms));
-			});
+			return Command('removeFile', [filename], true);
 		},
 		write: function (filename, destination) {
 			var data = '' + fs.readFileSync(filename),
 				pathLib = require('path'),
 				basename = pathLib.basename(destination || filename);
 
-			new SerialComms(port).on('ready', function (comms) {
-				new DeviceManager(comms).writeFile(basename, data)
-					.then(comms.close.bind(comms));
-			});
+			return Command('writeFile', [filename, destination], true);
 		},
 		push: function (filename, destination) {
 			var data = '' + fs.readFileSync(filename),
@@ -95,40 +75,21 @@ var commands = {
 						break;
 				}
 			}
-
-			return new SerialComms(port).on('ready', function (comms) {
-				new DeviceManager(comms).writeFile(basename, data)
-					.then(comms.close.bind(comms));
-			});
+			return Command('writeFile', [basename, data], true);
 		},
 		read: function (filename) {
-			return new SerialComms(port).on('ready', function (comms) {
-				new DeviceManager(comms).readFile(filename)
-					.then(function (data) { return data.replace(/\r\n\r\n/g, '\n'); })
-					.then(console.log)
-					.then(comms.close.bind(comms));
-			});
+			return Command('readFile', [filename], true)
+				.then(function (data) { return data.replace(/\r\n\r\n/g, '\n'); });
 		},
 		execute: function (filename) {
-			return new SerialComms(port).on('ready', function (comms) {
-				new DeviceManager(comms).executeFile(filename)
-					.then(console.log)
-					.then(comms.close.bind(comms));
-			});
+			return Command('executeFile', [filename], true);
 		}
 	},
 	restart: function () {
-		return new SerialComms(port).on('ready', function (comms) {
-			new DeviceManager(comms).restart()
-				.then(comms.close.bind(comms));
-		});
+		return Command('restart', null, true);
 	},
 	run: function (lua) {
-		return new SerialComms(port).on('ready', function (comms) {
-			new DeviceManager(comms).executeLua(lua)
-				.then(console.log)
-				.then(comms.close.bind(comms));
-		});
+		return Command('executeLua', [lua], true);
 	},
   	monitor: function() {
 		console.log("Displaying output from port " + port + ".");
@@ -139,42 +100,61 @@ var commands = {
 		});
   	},
 	fsinfo: function(){
-		return new SerialComms(port).on('ready', function(comms){
-			new DeviceManager(comms).fsinfo()
-				.then(console.log)
-				.then(comms.close.bind(comms));
- 		});
+		return Command('fsinfo', null, true);
 	},
 	info: {
 		heap: function(){
-			return new SerialComms(port).on('ready', function(comms){
-				new DeviceManager(comms).infoHeap()
-					.then(console.log)
-					.then(comms.close.bind(comms));
-	 		});
+			return Command('infoHeap', null, true);
 		},
 		flash: function(){
-			return new SerialComms(port).on('ready', function(comms){
-				new DeviceManager(comms).infoFlashId()
-					.then(console.log)
-					.then(comms.close.bind(comms));
-	 		});
+			return Command('infoFlashId', null, true);
 		},
 		build: function(){
-			return new SerialComms(port).on('ready', function(comms){
-				new DeviceManager(comms).infoBuild()
-					.then(console.log)
-					.then(comms.close.bind(comms));
-	 		});
+			return Command('infoBuild', null, true);
 		},
 		chip: function(){
-			return new SerialComms(port).on('ready', function(comms){
-				new DeviceManager(comms).infoChipId()
-					.then(console.log)
-					.then(comms.close.bind(comms));
-	 		});
+			return Command('infoChipId', null, true);
 		}
 	}
 };
+
+
+function Command(cmd, args, pretty){
+	var Spinner = require('chalk-cli-spinner');
+	var s = pretty ? new Spinner() : {stop:function(){}};
+
+	var port = getPort();
+
+	return new Promise(function(resolve, reject){
+		new SerialComms(port).on('ready', function(comms){
+			new DeviceManager(comms).execute(cmd, args)
+				.then(function(res){
+					s.stop();
+					resolve(res);
+				})
+				.then(comms.close.bind(comms));
+		}).on('error', function(err){
+			console.log('Ensure your port is not busy');
+			reject(err);
+		});
+	});
+}
+
+function getPort(){
+	var args = process.argv.slice(2),
+		port;
+
+
+	if (args[0] == 'port' && args[1] == 'set') {
+	 //NOOP
+	}
+	else if (!fs.existsSync(PORT_FILENAME)) {
+		console.log ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
+		process.exit();
+	} else {
+		port = '' + fs.readFileSync(PORT_FILENAME);
+	}
+	return port;
+}
 
 module.exports = commands;

@@ -1,11 +1,9 @@
-
+'use strict';
 
 // Externals
 var SerialPort = require('serialport').SerialPort,
 	EventEmitter = require('events').EventEmitter,
 	util = require('util');
-
-
 
 // Public
 function SerialComms (port) {

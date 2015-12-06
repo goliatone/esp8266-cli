@@ -1,6 +1,6 @@
 'use strict';
 
-var Promise = require('bluebird');
+var Promise = require('es6-promise');
 
 var CHUNK_SIZE = 128;
 
@@ -37,7 +37,7 @@ DeviceManager.prototype.infoFlashId = function(){
 	return this._sendCommand(command);
 };
 
-DeviceManager.prototype.infoInfo = function(){
+DeviceManager.prototype.infoBuild = function(){
 	// majorVer (number)
 	// minorVer (number)
 	// devVer (number)
@@ -49,7 +49,7 @@ DeviceManager.prototype.infoInfo = function(){
 	var command = 'ma, mi, de, ch, fl, fs, fm, fp = node.info();print("["..ma..","..mi..","..de..","..ch..","..fl..","..fs..","..fm..","..fp.."]");';
 	// var command = 'ma, mi, de, ch, fl, fs, fm, fp = node.info();print("["..ma..","..mi..","..de..","..ch..","..fl..","..fs..","..fm..","..fp.."]");ma=nil, mi=nil, de=nil, ch=nil, fl=nil, fs=nil, fm=nil, fp=nil';
 	return this._sendCommand(command).then(function(data){
-		return data.split('\t');
+		return JSON.parse(data);
 	});
 };
 

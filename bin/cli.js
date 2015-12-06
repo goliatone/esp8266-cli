@@ -8,7 +8,6 @@ var program = require('commander'),
 	commands = require('./cmds'),
 	PORT_FILENAME = __dirname + '/port.txt';
 
-
 var port = 'getport',
 	success;
 
@@ -26,20 +25,10 @@ program
 	.command('port <cmd> [port]')
 	.description('Manage serial port configuration. Valid <cmd>\'s: get|set|list')
 	.action(function(cmd, port, options){
-		//validate command
-		switch (cmd) {
-			case 'get':
-				commands.port.get();
-				break;
-			case 'set':
-				commands.port.set(port);
-				break;
-			case 'list':
-				commands.port.list();
-				break;
-			default:
-				unrecognizedCommand('Unrecognized command ' + cmd);
+		if(! commands.port.hasOwnProperty(cmd)){
+			unrecognizedCommand('Unrecognized command ' + cmd);
 		}
+		commands.port[cmd](port);
 	});
 
 program
@@ -56,30 +45,13 @@ program
 		'\n\texecute [filename]: Execute [filename] in the board using "dofile".\n'
 	)
 	.action(function(cmd, filename, destination, options){
-		switch (cmd) {
-			case 'list':
-				commands.file.list();
-				break;
-			case 'remove':
-				commands.file.remove(filename);
-				break;
-			case 'write':
-				//TODO should we take -c option? compile?
-				//it would load the file, compile it and remove the lua?
-				commands.file.write(filename, destination);
-				break;
-			case 'push':
-				commands.file.push(filename, destination);
-				break;
-			case 'read':
-				commands.file.read(filename, destination);
-				break;
-			case 'execute':
-				commands.file.execute(filename, destination);
-				break;
-			default:
-				unrecognizedCommand('Unrecognized command ' + cmd);
+
+		if(! commands.file.hasOwnProperty(cmd)){
+			unrecognizedCommand('Unrecognized command ' + cmd);
 		}
+		//TODO should we take "write -c" option? compile?
+		//it would load the file, compile it and remove the lua?
+		commands.file[cmd](filename, destination);
 	});
 
 program
@@ -114,25 +86,11 @@ program
 	.command('info <cmd>')
 	.description('Shows different information about the system.')
 	.action(function(cmd){
-		switch (cmd) {
-			case 'heap':
-				commands.info.heap();
-				break;
-			case 'flash':
-				commands.info.flashId();
-				break;
-			case 'build':
-				commands.info.build();
-				break;
-			case 'chip':
-				commands.info.chipId();
-				break;
-			default:
-				unrecognizedCommand('Unrecognized command ' + cmd);
+		if(! commands.info.hasOwnProperty(cmd)){
+			unrecognizedCommand('Unrecognized command ' + cmd);
 		}
+		commands.info[cmd]();
 	});
-
-
 
 
 //wifi management
@@ -159,7 +117,8 @@ program
 program
     .command('*')
     .action(function(cmd){
-      console.error('Unknown command:', cmd);
+    	console.error('Unknown command:', cmd);
+		setTimeout(program.outputHelp.bind(program), 500);
     });
 
 program.parse(process.argv);

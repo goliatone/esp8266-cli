@@ -121,7 +121,11 @@ program
 		setTimeout(program.outputHelp.bind(program), 500);
     });
 
+if(process.argv.length === 2) program.outputHelp();
+
 program.parse(process.argv);
+
+
 
 function unrecognizedCommand(msg){
 	console.error(msg);

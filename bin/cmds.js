@@ -1,22 +1,23 @@
 #!/usr/bin/env node
 
-var fs = require('fs'),
-	SerialComms = require('../src/SerialComms'),
+
+var SerialComms = require('../src/SerialComms'),
 	DeviceManager = require('../src/DeviceManager'),
-	PORT_FILENAME = __dirname + '/port.txt';
+	PortManager = require('../src/PortManager')(__dirname + '/port.txt');
 
 var commands = {
 	port: {
 		set: function (port) {
-			fs.writeFileSync(PORT_FILENAME, port);
+			return PortManager.set(port);
 		},
 		get: function () {
-			console.log ('Port:', getPort() || '[not set]');
+			return PortManager.get().catch(function(err){
+				console.log ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
+        		process.exit();
+			});
 		},
 		list: function(){
-			require('serialport').list(function(err, ports){
-				console.log(ports);
-			});
+			return PortManager.list();
 		}
 	},
 	file: {
@@ -140,21 +141,6 @@ function Command(cmd, args, pretty){
 	});
 }
 
-function getPort(){
-	var args = process.argv.slice(2),
-		port;
 
-
-	if (args[0] == 'port' && args[1] == 'set') {
-	 //NOOP
-	}
-	else if (!fs.existsSync(PORT_FILENAME)) {
-		console.log ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
-		process.exit();
-	} else {
-		port = '' + fs.readFileSync(PORT_FILENAME);
-	}
-	return port;
-}
 
 module.exports = commands;

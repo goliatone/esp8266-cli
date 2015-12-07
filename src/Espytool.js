@@ -44,6 +44,13 @@ function write_flash (port, firmware, cb){
 
     return new Promise(function(resolve, reject){
         command.stdout.on('data', function (data) {
+            //Parse:
+            //Connecting...
+            // Erasing flash...
+            // ==> Writing at 0x%08x... (%d %%) <==
+            // Wrote 400384 bytes at 0x00000000 in 38.5 seconds (83.1 kbit/s)...
+            //
+            // Leaving...
             cb(null, '' + data);
         });
 

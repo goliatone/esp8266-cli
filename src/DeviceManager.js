@@ -12,13 +12,18 @@ DeviceManager.prototype.execute = function(cmd, args){
 	return this[cmd].apply(this, args);
 };
 
-DeviceManager.prototype.fsinfo = function(){
+DeviceManager.prototype.fsInfo = function(){
 	//TODO: Should we print("["..t..","..u..","..r.."]")
 	var command = 'r,u,t=file.fsinfo() print("Total : "..t.." bytes_NL_Used  : "..u.." bytes_NL_Remain: "..r.." bytes_NL_") r=nil u=nil t=nil';
 	return this._sendCommand(command)
 	.then(function (data) {
 		return '' + data.replace(/_NL_/gm, '\r\n');
 	});
+};
+
+DeviceManager.prototype.fsFormat = function(){
+	var command = 'file.format()';
+	return this._sendCommand(command);
 };
 
 DeviceManager.prototype.wifiIP = function(){

@@ -30,7 +30,10 @@ program
 		}
 		commands.port[cmd](port).then(function(res){
 			if(cmd === 'list'){
-				console.log('List', res)
+				require('../src/listFiles')({
+					'Port Name': 'comName',
+					'Manufacturer': 'manufacturer'
+				}, [40, 40])(res);
 			} else console.log ('Port:', res);
 		});
 	});
@@ -56,7 +59,12 @@ program
 		//TODO should we take "write -c" option? compile?
 		//it would load the file, compile it and remove the lua?
 		commands.file[cmd](filename, destination).then(function(res){
-			console.log(res)
+			if(cmd === 'list'){
+				require('../src/listFiles')({
+					'File': 'filename',
+					'Size (bytes)': 'size'
+				})(res);
+			} else console.log ('Port:', res);
 		});
 	});
 

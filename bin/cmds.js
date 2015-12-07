@@ -44,6 +44,9 @@ var commands = {
 		write: function (filename, destination) {
 			var data = '' + fs.readFileSync(filename),
 				pathLib = require('path'),
+				//TODO: For HTML/CSS/JS files, we might want to mimik
+				//filesystem so that if we upload folder, we should
+				//have option to keep directory structure.
 				basename = pathLib.basename(destination || filename);
 
 			return Command('writeFile', [basename, data], true);
@@ -52,6 +55,9 @@ var commands = {
 		push: function (filename, destination) {
 			var data = '' + fs.readFileSync(filename),
 				pathLib = require('path'),
+				//TODO: For HTML/CSS/JS files, we might want to mimik
+				//filesystem so that if we upload folder, we should
+				//have option to keep directory structure.
 				basename = pathLib.basename(destination || filename),
 				match = filename.match(/\.([^\.]+)$/);
 
@@ -143,7 +149,7 @@ var commands = {
 				//TODO: How do we handle feedback? pass in stedout, stderr?
 				if(err){
 					console.error('PYTHON ERROR:');
-					
+
 					console.error(err);
 				}
 				else console.log(output);

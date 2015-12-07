@@ -97,11 +97,14 @@ program
 	});
 
 program
-	.command('fsinfo')
+	.command('fs')
 	.description('Shows information about the file system.')
 	.action(function(cmd){
-		commands.fsinfo().then(function(res){
-			console.log(res)
+		if(! commands.fs.hasOwnProperty(cmd)){
+			unrecognizedCommand('Unrecognized command ' + cmd);
+		}
+		commands.fs[cmd]().then(function(res){
+			console.log(res);
 		});
 	});
 
@@ -113,7 +116,7 @@ program
 			unrecognizedCommand('Unrecognized command ' + cmd);
 		}
 		commands.info[cmd]().then(function(res){
-			console.log(res)
+			console.log(res);
 		});
 	});
 
@@ -143,17 +146,6 @@ program
 			console.log(res);
 		});
 	});
-
-//wifi management
-//node.restore() --Added on 07/04/2015
-
-//Get IP:
-// if wifi.getmode() == 1 then print(wifi.sta.getip()) else print(wifi.ap.getip()) end
-
-//Get mac?
-
-//get list of networks?!
-
 
 // program
 // 	.command('repl')

@@ -149,9 +149,9 @@ var commands = {
 				//TODO: How do we handle feedback? pass in stedout, stderr?
 				if(err){
 					console.error('PYTHON ERROR:');
-
 					console.error(err);
 				}
+				//Here we should emit progress event instead:
 				else console.log(output);
 			});
 		}

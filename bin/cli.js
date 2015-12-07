@@ -143,6 +143,11 @@ program
 			unrecognizedCommand('Need to provide path to firmware.');
 		}
 		commands.esptool.flash(firmware).then(function(res){
+			// if(cmd==='flash'){
+			// //Actually, this does not get progress info :/
+			// 	//var progress = require('smooth-progress');
+			// 	//
+			// } else
 			console.log(res);
 		});
 	});

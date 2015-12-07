@@ -3,7 +3,9 @@
 
 var SerialComms = require('../src/SerialComms'),
 	DeviceManager = require('../src/DeviceManager'),
-	PortManager = require('../src/PortManager')(__dirname + '/.port');
+	Espytool = require('../src/Espytool'),
+	PortManager = require('../src/PortManager')(__dirname + '/.port'),
+	fs = require('fs');
 
 var commands = {
 	port: {
@@ -38,13 +40,15 @@ var commands = {
 		remove: function (filename) {
 			return Command('removeFile', [filename], true);
 		},
+		//Should this be upload?
 		write: function (filename, destination) {
 			var data = '' + fs.readFileSync(filename),
 				pathLib = require('path'),
 				basename = pathLib.basename(destination || filename);
 
-			return Command('writeFile', [filename, destination], true);
+			return Command('writeFile', [filename, data], true);
 		},
+
 		push: function (filename, destination) {
 			var data = '' + fs.readFileSync(filename),
 				pathLib = require('path'),
@@ -116,6 +120,24 @@ var commands = {
 		},
 		chip: function(){
 			return Command('infoChipId', null, true);
+		}
+	},
+	wifi: {
+		restore: function(){
+			return Command('wifiRestore', null, true);
+		},
+		getip: function(){
+			return Command('wifiIP', null, true);
+		}
+	},
+	esptool:{
+		flash: function(firmware){
+			var port = PortManager.getSync();
+			return Espytool(port, firmware, function(err, output){
+				//TODO: How do we handle feedback? pass in stedout, stderr?
+				if(err) console.error(err);
+				else console.log(output);
+			});
 		}
 	}
 };

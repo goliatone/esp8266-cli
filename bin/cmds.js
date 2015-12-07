@@ -46,7 +46,7 @@ var commands = {
 				pathLib = require('path'),
 				basename = pathLib.basename(destination || filename);
 
-			return Command('writeFile', [filename, data], true);
+			return Command('writeFile', [basename, data], true);
 		},
 
 		push: function (filename, destination) {
@@ -105,8 +105,14 @@ var commands = {
 			comms.monitor();
 		});
   	},
-	fsinfo: function(){
-		return Command('fsinfo', null, true);
+	fs: {
+
+		info: function(){
+			return Command('fsInfo', null, true);
+		},
+		format: function(){
+			return Command('fsFormat', null, true);
+		}
 	},
 	info: {
 		heap: function(){
@@ -135,7 +141,11 @@ var commands = {
 			var port = PortManager.getSync();
 			return Espytool(port, firmware, function(err, output){
 				//TODO: How do we handle feedback? pass in stedout, stderr?
-				if(err) console.error(err);
+				if(err){
+					console.error('PYTHON ERROR:');
+					
+					console.error(err);
+				}
 				else console.log(output);
 			});
 		}

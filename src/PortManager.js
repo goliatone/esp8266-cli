@@ -15,6 +15,11 @@ module.exports = function(filepath){
         });
     }
 
+    function getPortSync(){
+        if(!fs.existsSync(filepath)) return false;
+        return '' + fs.readFileSync(filepath);
+    }
+
     function setPort(port){
         return new Promise(function(resolve, reject){
             fs.writeFile(filepath, port, function(err){
@@ -35,6 +40,7 @@ module.exports = function(filepath){
     }
     return {
         get: getPort,
+        getSync: getPortSync,
         set: setPort,
         list: listPorts
     };

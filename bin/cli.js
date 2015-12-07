@@ -43,9 +43,12 @@ program
 	.description('Manage files. Valid <cmd>\'s:' +
 		'\n\tlist: Show a list all files in the board' +
 		'\n\tremove [filename]: Remove the file [filename] from the board' +
-		'\n\twrite [filename] [destination]: Write the local file [filename] as [destination] in the board' +
+		'\n\twrite [filename] [destination]: Write the local file [filename]' +
+		'\n\t\tas [destination] in the board. If [destination] is not given' +
+		'\n\t\tfile will be have the same name.' +
 		//TODO: Rename to compress
-		'\n\tpush [filename] [destination]: Comress and write the local file [filename] as [destination] in the board.' +
+		'\n\tpush [filename] [destination]: Comress and write the local file' +
+		'\n\t\t[filename] as [destination] in the board.' +
 		'\n\t\tIt will check for the file\'s extension and use an appropiate compressor.' +
 		'\n\t\tSupported filetypes are: lua, html, js, and css.' +
 		'\n\tread [filename]: Read [filename] from the board and show in stdout.' +
@@ -64,7 +67,7 @@ program
 					'File': 'filename',
 					'Size (bytes)': 'size'
 				})(res);
-			} else console.log ('Port:', res);
+			} else console.log (res);
 		});
 	});
 
@@ -114,6 +117,32 @@ program
 		});
 	});
 
+
+program
+	.command('wifi <cmd>')
+	.description('Manage WiFi settings. Valid <cmd>\'s: restore|getip')
+	.action(function(cmd){
+		if(! commands.wifi.hasOwnProperty(cmd)){
+			unrecognizedCommand('Unrecognized command ' + cmd);
+		}
+		commands.wifi[cmd]().then(function(res){
+			console.log(res);
+		});
+	});
+
+program
+	.command('flash <firmware>')
+	.description('Flash the board with the given firmware.' +
+		'\n\<firmware>: Must be a valid path to a _release_.bin'
+	)
+	.action(function(firmware){
+		if(!firmware){
+			unrecognizedCommand('Need to provide path to firmware.');
+		}
+		commands.esptool.flash(firmware).then(function(res){
+			console.log(res);
+		});
+	});
 
 //wifi management
 //node.restore() --Added on 07/04/2015

@@ -3,7 +3,7 @@
 
 var SerialComms = require('../src/SerialComms'),
 	DeviceManager = require('../src/DeviceManager'),
-	PortManager = require('../src/PortManager')(__dirname + '/port.txt');
+	PortManager = require('../src/PortManager')(__dirname + '/.port');
 
 var commands = {
 	port: {
@@ -93,7 +93,8 @@ var commands = {
 		return Command('executeLua', [lua], true);
 	},
   	monitor: function() {
-		console.log("Displaying output from port " + port + ".");
+		var port = PortManager.getSync();
+		console.log("Displaying output from port: " + port + ".");
 		console.log("Press ^C to stop.\n");
 
 		return new SerialComms(port).on('ready', function (comms) {
@@ -124,9 +125,10 @@ function Command(cmd, args, pretty){
 	var Spinner = require('chalk-cli-spinner');
 	var s = pretty ? new Spinner() : {stop:function(){}};
 
-	var port = getPort();
-
 	return new Promise(function(resolve, reject){
+		var port = PortManager.getSync();
+		if(port === false) return reject();
+
 		new SerialComms(port).on('ready', function(comms){
 			new DeviceManager(comms).execute(cmd, args)
 				.then(function(res){

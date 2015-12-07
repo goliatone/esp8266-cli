@@ -10,10 +10,13 @@
   },
   "version": "0.0.3",
   "engines": {
-    "node": ">=0.8.x"
+    "node": ">=0.12.x"
   },
   "bin": {
     "esp": "./bin/cli.js"
+  },
+  "scripts": {
+    "postinstall": "node ./scripts/postinstall"
   },
   "homepage": "http://esp8266.co.uk",
   "repository": {

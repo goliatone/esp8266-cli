@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+'use strict';
+//require('child_process').execSync is a feature of node 0.12...
+//redo and lower node engine version
+//also check: spawn-sync [Prollyfill]
+var execSync = require('child_process').execSync;
+
+var INSTALL_PYSERIAL_CMD = 'pip install pyserial';
+var LIST_PACKAGES_CMD = 'python -c \'import pip; packages = pip.get_installed_distributions(); package_list = ["%s" % (i.key) for i in packages]; print(package_list)\'';
+
+module.exports = function(){
+    console.log('Checking dependencies for esptool.py');
+
+    var packages = JSON.parse(execSync(LIST_PACKAGES_CMD).replace(/\'/g, '\"'));
+
+    if(!packages.indexOf('pyserial')) {
+        console.log('Dependency "pyserial" not found.');
+        console.log('Executing the command:');
+        console.log('$ ', INSTALL_PYSERIAL_CMD);
+        console.log('If the command fails, execute manually');
+        execSync(INSTALL_PYSERIAL_CMD);
+    }
+};

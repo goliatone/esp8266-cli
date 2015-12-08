@@ -7,7 +7,9 @@ var SerialComms = require('../src/SerialComms'),
 	PortManager = require('../src/PortManager')(__dirname + '/.port'),
 	fs = require('fs');
 
-var commands = {
+var Commands = {
+	stdout: console.log.bind(console),
+	stderr: console.error.bind(console),
 	port: {
 		set: function (port) {
 			return PortManager.set(port);
@@ -24,7 +26,7 @@ var commands = {
 	},
 	file: {
 		list: function () {
-			return Command('getFileList', null, true);
+			return DeviceCommand('getFileList', null, true);
 			return new SerialComms(getPort()).on('ready', function (comms) {
 				new DeviceManager(comms).getFileList()
 					.then(function (files) {
@@ -38,7 +40,7 @@ var commands = {
 			});
 		},
 		remove: function (filename) {
-			return Command('removeFile', [filename], true);
+			return DeviceCommand('removeFile', [filename], true);
 		},
 		//Should this be upload?
 		write: function (filename, destination) {
@@ -49,7 +51,7 @@ var commands = {
 				//have option to keep directory structure.
 				basename = pathLib.basename(destination || filename);
 
-			return Command('writeFile', [basename, data], true);
+			return DeviceCommand('writeFile', [basename, data], true);
 		},
 
 		push: function (filename, destination) {
@@ -86,21 +88,21 @@ var commands = {
 						break;
 				}
 			}
-			return Command('writeFile', [basename, data], true);
+			return DeviceCommand('writeFile', [basename, data], true);
 		},
 		read: function (filename) {
-			return Command('readFile', [filename], true)
+			return DeviceCommand('readFile', [filename], true)
 				.then(function (data) { return data.replace(/\r\n\r\n/g, '\n'); });
 		},
 		execute: function (filename) {
-			return Command('executeFile', [filename], true);
+			return DeviceCommand('executeFile', [filename], true);
 		}
 	},
 	restart: function () {
-		return Command('restart', null, true);
+		return DeviceCommand('restart', null, true);
 	},
 	run: function (lua) {
-		return Command('executeLua', [lua], true);
+		return DeviceCommand('executeLua', [lua], true);
 	},
   	monitor: function() {
 		var port = PortManager.getSync();
@@ -114,32 +116,32 @@ var commands = {
 	fs: {
 
 		info: function(){
-			return Command('fsInfo', null, true);
+			return DeviceCommand('fsInfo', null, true);
 		},
 		format: function(){
-			return Command('fsFormat', null, true);
+			return DeviceCommand('fsFormat', null, true);
 		}
 	},
 	info: {
 		heap: function(){
-			return Command('infoHeap', null, true);
+			return DeviceCommand('infoHeap', null, true);
 		},
 		flash: function(){
-			return Command('infoFlashId', null, true);
+			return DeviceCommand('infoFlashId', null, true);
 		},
 		build: function(){
-			return Command('infoBuild', null, true);
+			return DeviceCommand('infoBuild', null, true);
 		},
 		chip: function(){
-			return Command('infoChipId', null, true);
+			return DeviceCommand('infoChipId', null, true);
 		}
 	},
 	wifi: {
 		restore: function(){
-			return Command('wifiRestore', null, true);
+			return DeviceCommand('wifiRestore', null, true);
 		},
 		getip: function(){
-			return Command('wifiIP', null, true);
+			return DeviceCommand('wifiIP', null, true);
 		}
 	},
 	esptool:{
@@ -148,18 +150,18 @@ var commands = {
 			return Espytool(port, firmware, function(err, output){
 				//TODO: How do we handle feedback? pass in stedout, stderr?
 				if(err){
-					console.error('PYTHON ERROR:');
-					console.error(err);
+					Commands.stderr('PYTHON ERROR:');
+					Commands.stderr(err);
 				}
 				//Here we should emit progress event instead:
-				else console.log(output);
+				else Command.stedout(output);
 			});
 		}
 	}
 };
 
 
-function Command(cmd, args, pretty){
+function DeviceCommand(cmd, args, pretty){
 	var Spinner = require('chalk-cli-spinner');
 	var s = pretty ? new Spinner() : {stop:function(){}};
 
@@ -183,4 +185,4 @@ function Command(cmd, args, pretty){
 
 
 
-module.exports = commands;
+module.exports = Commands;

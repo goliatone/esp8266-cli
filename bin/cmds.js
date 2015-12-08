@@ -17,7 +17,7 @@ var Commands = {
 		get: function () {
 			return PortManager.get().catch(function(err){
 				console.log ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
-        		process.exit();
+				process.exit();
 			});
 		},
 		list: function(){
@@ -104,15 +104,22 @@ var Commands = {
 	run: function (lua) {
 		return DeviceCommand('executeLua', [lua], true);
 	},
-  	monitor: function() {
+	monitor: function() {
 		var port = PortManager.getSync();
-		console.log("Displaying output from port: " + port + ".");
-		console.log("Press ^C to stop.\n");
 
-		return new SerialComms(port).on('ready', function (comms) {
-			comms.monitor();
+		return new Promise(function(resolve, reject){
+			if(!port) return reject(new Error('Port not available.'));
+
+			console.log('Displaying output from port: ' + port + '.');
+			console.log('Press ^C to stop.\n');
+
+			//This promise does not resolve, we just leave the connection
+			//open.
+			new SerialComms(port).on('ready', function (comms) {
+				comms.monitor();
+			});
 		});
-  	},
+	},
 	fs: {
 
 		info: function(){

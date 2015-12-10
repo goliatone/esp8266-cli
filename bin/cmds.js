@@ -8,6 +8,7 @@ var SerialComms = require('../src/SerialComms'),
 	fs = require('fs');
 
 var Commands = {
+	pretty: true,
 	stdout: console.log.bind(console),
 	stderr: console.error.bind(console),
 	port: {
@@ -26,7 +27,7 @@ var Commands = {
 	},
 	file: {
 		list: function () {
-			return DeviceCommand('getFileList', null, true);
+			return DeviceCommand('getFileList', null);
 			return new SerialComms(getPort()).on('ready', function (comms) {
 				new DeviceManager(comms).getFileList()
 					.then(function (files) {
@@ -99,7 +100,7 @@ var Commands = {
 		}
 	},
 	restart: function () {
-		return DeviceCommand('restart', null, true);
+		return DeviceCommand('restart', null);
 	},
 	run: function (lua) {
 		return DeviceCommand('executeLua', [lua], true);
@@ -116,32 +117,32 @@ var Commands = {
 	fs: {
 
 		info: function(){
-			return DeviceCommand('fsInfo', null, true);
+			return DeviceCommand('fsInfo', null);
 		},
 		format: function(){
-			return DeviceCommand('fsFormat', null, true);
+			return DeviceCommand('fsFormat', null);
 		}
 	},
 	info: {
 		heap: function(){
-			return DeviceCommand('infoHeap', null, true);
+			return DeviceCommand('infoHeap', null);
 		},
 		flash: function(){
-			return DeviceCommand('infoFlashId', null, true);
+			return DeviceCommand('infoFlashId', null);
 		},
 		build: function(){
-			return DeviceCommand('infoBuild', null, true);
+			return DeviceCommand('infoBuild', null);
 		},
 		chip: function(){
-			return DeviceCommand('infoChipId', null, true);
+			return DeviceCommand('infoChipId', null);
 		}
 	},
 	wifi: {
 		restore: function(){
-			return DeviceCommand('wifiRestore', null, true);
+			return DeviceCommand('wifiRestore', null);
 		},
 		getip: function(){
-			return DeviceCommand('wifiIP', null, true);
+			return DeviceCommand('wifiIP', null);
 		}
 	},
 	esptool:{
@@ -154,16 +155,17 @@ var Commands = {
 					Commands.stderr(err);
 				}
 				//Here we should emit progress event instead:
-				else Command.stedout(output);
+				else Commands.stedout(output);
 			});
 		}
 	}
 };
 
 
-function DeviceCommand(cmd, args, pretty){
+function DeviceCommand(cmd, args){
 	var Spinner = require('chalk-cli-spinner');
-	var s = pretty ? new Spinner() : {stop:function(){}};
+
+	var s = Commands.pretty ? new Spinner() : {stop:function(){}};
 
 	return new Promise(function(resolve, reject){
 		var port = PortManager.getSync();

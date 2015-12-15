@@ -1,7 +1,7 @@
 # An ESP8266 command line interface.
 Administer the file system and more on an ESP8266 that is flashed with [NodeMcu firmware](https://github.com/nodemcu/nodemcu-firmware).
 
-
+<!--
 >Noun	1.	E.S.P. - apparent power to perceive things that are not present to the sensesE.S.P. - apparent power to perceive things that are not present to the senses
 clairvoyance, ESP, extrasensory perception, second sight
 parapsychology, psychic phenomena, psychic phenomenon - phenomena that appear to contradict physical laws and suggest the possibility of causation by mental processes
@@ -12,7 +12,7 @@ http://skepdic.com/esp.html
 
 https://github.com/nodemcu/nodemcu-firmware/issues/241
 http://www.lua.org/manual/5.1/luac.html
-
+-->
 
 ## Install
 

@@ -8,7 +8,8 @@ module.exports = function(filepath){
         		port;
 
         	if (!fs.existsSync(filepath)) {
-                reject();
+                //TODO: Remove message from here.
+                reject(new Error('Port not set. Please set your port using "esp port set"'));
         	} else port = '' + fs.readFileSync(filepath);
 
             resolve(port, 'get');

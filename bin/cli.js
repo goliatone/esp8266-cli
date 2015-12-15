@@ -93,7 +93,9 @@ program
 	.command('monitor')
 	.description('Shows print statements from port ' + port + '.\n\nPress ^C to stop.')
 	.action(function(){
-		commands.monitor();
+		commands.monitor().catch(function(err){
+			console.error('Error starting monitor function.', err.message);
+		});
 	});
 
 program

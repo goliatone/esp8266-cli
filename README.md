@@ -188,6 +188,61 @@ Formats the file system removing all user files.
 $ esp fs format
 ```
 
+### info
+
+#### info heap
+
+```
+$ esp fs format
+```
+
+#### info flash
+
+Available flash memory.
+
+```
+$ esp info flash
+```
+
+#### info build
+
+Build information.
+
+- majorVer (number)
+- minorVer (number)
+- devVer (number)
+- chipid (number)
+- flashid (number)
+- flashsize (number)
+- flashmode (number)
+- flashspeed (number)
+
+```
+$ esp info build
+```
+
+#### info chip
+
+Returns chip id number.
+
+```
+$ esp info chip
+```
+
+### wifi
+
+#### wifi restore
+
+```
+$ esp wifi restore
+```
+
+#### wifi getip
+
+```
+$ esp wifi getip
+```
+
 ## Roadmap
 
 Add features:

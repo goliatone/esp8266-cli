@@ -30,7 +30,7 @@ $ esp --help
 
 The basic command format is as follows:
 ```
-$ esp <command> [subcommand] [data]
+$ esp <command> [subcommand] [options]
 ```
 
 
@@ -243,6 +243,18 @@ $ esp wifi restore
 $ esp wifi getip
 ```
 
+### esptool
+
+Provides a helper command to flash a board using [esptool][esptool]
+
+#### esptool flash &lt;firmware>
+
+The `<firmware>` parameter should be a valid path to a NodeMCU binary file.
+
+```
+$ esp esptool flash <firmware>
+```
+
 ## Roadmap
 
 Add features:
@@ -261,3 +273,6 @@ Add features:
 
 ## License
 MIT
+
+
+[esptool]: https://github.com/themadinventor/esptool

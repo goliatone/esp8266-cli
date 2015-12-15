@@ -28,17 +28,6 @@ var Commands = {
 	file: {
 		list: function () {
 			return DeviceCommand('getFileList', null);
-			return new SerialComms(getPort()).on('ready', function (comms) {
-				new DeviceManager(comms).getFileList()
-					.then(function (files) {
-						for (var i = 0, file; file = files[i]; i++) {
-							size = '' + file.size;
-							size = '        '.substr(size.length) + size;
-							console.log (size + ' bytes  ' + file.filename);
-						}
-					})
-					.then(comms.close.bind(comms));
-			});
 		},
 		remove: function (filename) {
 			return DeviceCommand('removeFile', [filename], true);

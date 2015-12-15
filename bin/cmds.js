@@ -127,6 +127,7 @@ var Commands = {
 			return DeviceCommand('infoFlashId', null);
 		},
 		build: function(){
+			//TODO: Format build info!
 			return DeviceCommand('infoBuild', null);
 		},
 		chip: function(){
@@ -141,7 +142,7 @@ var Commands = {
 			return DeviceCommand('wifiIP', null);
 		}
 	},
-	esptool:{
+	esptool: {
 		flash: function(firmware){
 			var port = PortManager.getSync();
 			return Espytool(port, firmware, function(err, output){

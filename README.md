@@ -267,6 +267,7 @@ Add features:
 * ~~Restore WiFi settings: node.restore()~~
 * Handle Esptool python error: busy port
 * For HTML/CSS/JS files we might want to keep dir structure.
+* Move `scripts/esptool.py` to it's own directory `scripts/esptool/esptool.py`.
 
 [lua-lint]: https://github.com/valeriansaliou/grunt-contrib-lualint/blob/master/tasks/lualint.js
 

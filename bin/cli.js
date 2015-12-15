@@ -110,7 +110,9 @@ program
 
 program
 	.command('info <cmd>')
-	.description('Shows different information about the system.')
+	.description('Shows different information about the system.'
+	 + '\n\tValid commands: heap|flash|build|chip'
+	)
 	.action(function(cmd){
 		if(! commands.info.hasOwnProperty(cmd)){
 			unrecognizedCommand('Unrecognized command ' + cmd);

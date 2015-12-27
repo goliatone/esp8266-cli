@@ -257,6 +257,8 @@ $ esp esptool flash <firmware>
 
 ## Roadmap
 
+Use: https://github.com/inikulin/elegant-status
+
 Add features:
 * repl (figure out if monitor is the same?)
 * compile lua files to lc (is `luac -o app.lc app.lua` the same as if we do on ESPLorer?)

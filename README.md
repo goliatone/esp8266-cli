@@ -17,7 +17,7 @@ http://www.lua.org/manual/5.1/luac.html
 ## Install
 
 ```
-$ npm i esp8266 -g
+$ npm i -g node-esp
 ```
 
 ## Usage

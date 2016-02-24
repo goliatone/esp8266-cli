@@ -2,7 +2,9 @@
   "name": "node-esp",
   "description": "Command line interface for the ESP8266 module. Read and write files to/from the module and more.",
   "keywords": [
-    "ESP8266"
+    "ESP8266",
+    "NodeMCU",
+    "esptool"
   ],
   "author": {
     "name": "goliatone",

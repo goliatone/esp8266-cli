@@ -1,5 +1,6 @@
 # An ESP8266 command line interface.
-Administer the file system and more on an ESP8266 that is flashed with [NodeMcu firmware](https://github.com/nodemcu/nodemcu-firmware).
+
+Flash [NodeMcu firmware](https://github.com/nodemcu/nodemcu-firmware) on a ESP8266 board, administer the file system and more.
 
 <!--
 >Noun	1.	E.S.P. - apparent power to perceive things that are not present to the sensesE.S.P. - apparent power to perceive things that are not present to the senses
@@ -17,7 +18,7 @@ http://www.lua.org/manual/5.1/luac.html
 ## Install
 
 ```
-$ npm i esp8266 -g
+$ npm i -g node-esp
 ```
 
 ## Usage

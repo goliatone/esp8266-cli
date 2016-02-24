@@ -1,6 +1,6 @@
 {
   "name": "node-esp",
-  "description": "Command line interface for the ESP8266 module. Read and write files to/from the module and more.",
+  "description": "Command line interface for the NodeMCU ESP8266 module. Manage the filesytem, monitor, flash firmware and more.",
   "keywords": [
     "ESP8266",
     "NodeMCU",

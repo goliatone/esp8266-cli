@@ -39,6 +39,7 @@
     "html-minifier": "^0.6.9",
     "luamin": "^0.2.8",
     "serialport": "^1.4.6",
-    "uglify-js": "^2.4.16"
+    "uglify-js": "^2.4.16",
+    "update-notifier": "^0.6.1"
   }
 }

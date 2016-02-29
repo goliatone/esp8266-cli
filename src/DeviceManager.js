@@ -152,7 +152,7 @@ DeviceManager.prototype.readFile = function (filename) {
 };
 
 DeviceManager.prototype.executeFile = function (filename) {
-	var command = 'dofile"' + filename + '"';
+	var command = 'dofile("' + filename + '")';
 	return this._sendCommand(command);
 };
 

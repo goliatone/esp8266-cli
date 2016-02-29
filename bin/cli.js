@@ -10,11 +10,15 @@ var program = require('commander'),
 var port = 'getport',
 	success;
 
+/**********************************
+ * NOTIFY IF WE HAVE NEW VERSION.
+**********************************/
+require('update-notifier')({pkg: pkg}).notify();
+
 program
 	.option('-v, --verbose')
 	.option('-r, --raw')
 	.version(pkg.version);
-
 
 /**
  * port

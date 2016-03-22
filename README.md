@@ -15,11 +15,44 @@ https://github.com/nodemcu/nodemcu-firmware/issues/241
 http://www.lua.org/manual/5.1/luac.html
 -->
 
+## Prerequisite
+
+This module depends on SiLabs USB to UART bridge drivers. If you don't have them already installed, here you can find and [download][silabs] the driver.
+
+**Note that after installing the drivers you will have to restart your computer**.
+
 ## Install
 
 ```
 $ npm i -g node-esp
 ```
+
+After installing or any time after upgrading the module, you have to set the name of the serial port we will use to communicate with the hardware.
+
+This should list all available ports:
+
+```
+$ esp port list
+┌────────────────────────────────────────┬────────────────────────────────────────┐
+│ Port Name                              │ Manufacturer                           │
+├────────────────────────────────────────┼────────────────────────────────────────┤
+│ /dev/cu.Bluetooth-Incoming-Port        │                                        │
+├────────────────────────────────────────┼────────────────────────────────────────┤
+│ /dev/cu.Bluetooth-Modem                │                                        │
+├────────────────────────────────────────┼────────────────────────────────────────┤
+│ /dev/cu.gPhone                         │                                        │
+├────────────────────────────────────────┼────────────────────────────────────────┤
+│ /dev/cu.SLAB_USBtoUART                 │ Silicon Labs                           │
+└────────────────────────────────────────┴────────────────────────────────────────┘
+```
+
+The last one is the SiLabs driver we installed, so, to set it:
+
+```
+$ npm port set /dev/cu.SLAB_USBtoUART
+Port: /dev/cu.SLAB_USBtoUART
+```
+
 
 ## Usage
 
@@ -280,3 +313,4 @@ MIT
 
 
 [esptool]: https://github.com/themadinventor/esptool
+[silabs]:https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx

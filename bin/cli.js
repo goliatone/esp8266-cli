@@ -104,7 +104,10 @@ program
 
 program
 	.command('fs')
-	.description('Shows information about the file system.')
+	.description('Interact with the filesystem. Valid <cmd>\'s:' +
+		'\n\tinfo: Show information about the fylesistem.' +
+		'\n\tformat: Formats the board removing all files.\n'
+	)
 	.action(function(cmd){
 		if(! commands.fs.hasOwnProperty(cmd)){
 			unrecognizedCommand('Unrecognized command ' + cmd);

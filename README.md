@@ -49,7 +49,7 @@ $ esp port list
 The last one is the SiLabs driver we installed, so, to set it:
 
 ```
-$ npm port set /dev/cu.SLAB_USBtoUART
+$ esp port set /dev/cu.SLAB_USBtoUART
 Port: /dev/cu.SLAB_USBtoUART
 ```
 

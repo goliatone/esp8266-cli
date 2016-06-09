@@ -14,9 +14,9 @@ var port = 'getport',
  * NOTIFY IF WE HAVE NEW VERSION.
 **********************************/
 var notifier = require('update-notifier')({
-	pkg: pkg,
+	pkg: {name: pkg.name, version: pkg.version},
 	callback: function(err, update){
-		if(!update) return;
+		if(!update || update.type === 'latest') return;
 		notifier.update = update;
 		notifier.notify();
 	}

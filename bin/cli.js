@@ -13,7 +13,14 @@ var port = 'getport',
 /**********************************
  * NOTIFY IF WE HAVE NEW VERSION.
 **********************************/
-require('update-notifier')({pkg: pkg}).notify();
+var notifier = require('update-notifier')({
+	pkg: pkg,
+	callback: function(err, update){
+		if(!update) return;
+		notifier.update = update;
+		notifier.notify();
+	}
+});
 
 program
 	.option('-v, --verbose')

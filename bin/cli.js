@@ -197,3 +197,20 @@ function unrecognizedCommand(msg){
 	console.error(msg);
 	process.exit(1);
 }
+
+process.on('SIGINT', function(){
+	if(!commands.PortManager.getSync());
+	console.log('\n*******************************************');
+	console.log('It appears that you forgot to set');
+	console.log('a port for esp.');
+	console.log('');
+	console.log('You have to run "esp port list"');
+	console.log('and then "esp port set <port>"');
+	console.log('');
+	console.log('On a Mac computer the command usually is:');
+	console.log('');
+	console.log('esp port set /dev/cu.SLAB_USBtoUART');
+	console.log('');
+	console.log('*******************************************');
+	process.exit()
+});

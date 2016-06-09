@@ -185,3 +185,4 @@ function DeviceCommand(cmd, args){
 
 
 module.exports = Commands;
+module.exports.PortManager = PortManager;

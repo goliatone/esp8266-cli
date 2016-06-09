@@ -1,6 +1,6 @@
 'use strict';
 
-var Table = require('cli-table');
+var Table = require('cli-table2');
 
 
 module.exports = function(fields, colWidths){

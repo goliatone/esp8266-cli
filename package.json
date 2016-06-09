@@ -33,7 +33,7 @@
   "dependencies": {
     "chalk-cli-spinner": "^0.2.0",
     "clean-css": "^3.0.7",
-    "cli-table": "^0.3.1",
+    "cli-table2": "^0.2.0",
     "commander": "^2.9.0",
     "es6-promise": "^2.0.0",
     "html-minifier": "^0.6.9",

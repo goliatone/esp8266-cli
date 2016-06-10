@@ -6,6 +6,7 @@ require('./xterm');
 
 var program = require('commander'),
 	pkg = require('../package'),
+	check = require('../src/checks'),
 	commands = require('./cmds');
 
 var port = 'getport',
@@ -199,19 +200,7 @@ function unrecognizedCommand(msg){
 	process.exit(1);
 }
 
-process.on('SIGINT', function(){
-	if(!commands.PortManager.getSync());
-	console.warn('\n*******************************************');
-	console.warn('It appears that you forgot to set');
-	console.warn('a port for esp.');
-	console.warn('');
-	console.log('You have to run "esp port list"');
-	console.log('and then "esp port set <port>"');
-	console.warn('');
-	console.log('On a Mac computer the command usually is:');
-	console.warn('');
-	console.log('esp port set /dev/cu.SLAB_USBtoUART');
-	console.warn('');
-	console.warn('*******************************************');
-	process.exit()
+process.on('SIGINT', function(code){
+	check.portIsSet();
+	process.exit();
 });

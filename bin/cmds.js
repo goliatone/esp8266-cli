@@ -17,7 +17,7 @@ var Commands = {
 		},
 		get: function () {
 			return PortManager.get().catch(function(err){
-				console.log ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
+				console.error ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
 				process.exit();
 			});
 		},
@@ -100,8 +100,8 @@ var Commands = {
 		return new Promise(function(resolve, reject){
 			if(!port) return reject(new Error('Port not available.'));
 
-			console.log('Displaying output from port: ' + port + '.');
-			console.log('Press ^C to stop.\n');
+			console.info('Displaying output from port: ' + port + '.');
+			console.info('Press ^C to stop.\n');
 
 			//This promise does not resolve, we just leave the connection
 			//open.
@@ -176,7 +176,11 @@ function DeviceCommand(cmd, args){
 				})
 				.then(comms.close.bind(comms));
 		}).on('error', function(err){
-			console.log('Ensure your port is not busy');
+			s.stop();
+			console.error();
+			console.error('Ensure your USB cable and board are connected');
+			console.error('and the port is not being used by another program.');
+			console.error();
 			reject(err);
 		});
 	});

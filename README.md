@@ -2,6 +2,8 @@
 
 Flash [NodeMcu firmware](https://github.com/nodemcu/nodemcu-firmware) on a ESP8266 board, administer the file system and more.
 
+**Currently only Mac OS is fully supported.**
+
 <!--
 >Noun	1.	E.S.P. - apparent power to perceive things that are not present to the sensesE.S.P. - apparent power to perceive things that are not present to the senses
 clairvoyance, ESP, extrasensory perception, second sight
@@ -15,11 +17,13 @@ https://github.com/nodemcu/nodemcu-firmware/issues/241
 http://www.lua.org/manual/5.1/luac.html
 -->
 
-## Prerequisite
+## Prerequisites
 
 This module depends on SiLabs USB to UART bridge drivers. If you don't have them already installed, here you can find and [download][silabs] the driver.
 
 **Note that after installing the drivers you will have to restart your computer**.
+
+Currently it assumes that you have Python and [pip][pip] installed.
 
 ## Install
 
@@ -53,6 +57,59 @@ $ esp port set /dev/cu.SLAB_USBtoUART
 Port: /dev/cu.SLAB_USBtoUART
 ```
 
+## Installation Errors
+Here are some common errors during the installation process and their quick fix.
+
+##### `npm i -g node-esp` fails:
+
+It could be a permissions issue. Regardless, if you run the following command on your terminal you wont break anything. Then install node-esp again.
+```
+sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}`
+```
+
+If you see a similar error output to this, you might have to install pip.
+```
+Checking dependencies for esptool.py
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ImportError: No module named pip
+child_process.js:518
+    throw err;
+    ^
+
+Error: Command failed: python -c 'import pip; packages = pip.get_installed_distributions(); package_list = ["%s" % (i.key) for i in packages]; print(package_list)'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ImportError: No module named pipo
+
+    at checkExecSyncError (child_process.js:475:13)
+    at execSync (child_process.js:515:13)
+    at Module.module.exports (/Users/peperone/node-esp/scripts/postinstall:15:31)
+    at Object.<anonymous> (/Users/peperone/node-esp/scripts/postinstall:25:8)
+    at Module._compile (module.js:541:32)
+    at Object.Module._extensions..js (module.js:550:10)
+    at Module.load (module.js:458:32)
+    at tryModuleLoad (module.js:417:12)
+    at Function.Module._load (module.js:409:3)
+    at Function.Module.runMain (module.js:575:10)
+```
+
+Just run the following command from terminal:
+
+```
+sudo easy_install pip
+```
+
+If you see a similar error, but the package is `pyserial`:
+
+```
+ImportError: No module named pyserial
+```
+
+Just run the following command from terminal:
+```
+sudo easy_install pyserial
+```
 
 ## Usage
 
@@ -314,3 +371,4 @@ MIT
 
 [esptool]: https://github.com/themadinventor/esptool
 [silabs]:https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx
+[pip]:https://pypi.python.org/pypi/pip

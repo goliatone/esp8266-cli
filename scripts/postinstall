@@ -51,7 +51,8 @@ module.exports = function(){
             console.log();
             console.info('  pip install pyserial');
         }
-
+    } else {
+        console.info('Installation success √');
     }
 };
 

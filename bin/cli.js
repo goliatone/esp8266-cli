@@ -52,7 +52,7 @@ program
 	});
 
 program
-	.command('file <cmd> [filename] [destination]')
+	.command('file <cmd> <filename> [destination]')
 	.description('Manage files. Valid <cmd>\'s:' +
 		'\n\tlist: Show a list all files in the board' +
 		'\n\tremove [filename]: Remove the file [filename] from the board' +

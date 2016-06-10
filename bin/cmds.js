@@ -4,7 +4,7 @@
 var SerialComms = require('../src/SerialComms'),
 	DeviceManager = require('../src/DeviceManager'),
 	Espytool = require('../src/Espytool'),
-	PortManager = require('../src/PortManager')(__dirname + '/.port'),
+	PortManager = require('../src/PortManager')(getPortpath('.esp-port')),
 	fs = require('fs');
 
 var Commands = {
@@ -186,3 +186,9 @@ function DeviceCommand(cmd, args){
 
 module.exports = Commands;
 module.exports.PortManager = PortManager;
+module.exports.getPortpath = getPortpath;
+
+function getPortpath(filepath){
+	var osHomedir = require('os-homedir');
+	return require('path').join(osHomedir(), filepath);
+}

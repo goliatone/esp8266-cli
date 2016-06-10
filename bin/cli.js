@@ -41,6 +41,12 @@ program
 		if(! commands.port.hasOwnProperty(cmd)){
 			unrecognizedCommand('Unrecognized command ' + cmd);
 		}
+
+		if(cmd === 'set' && !port){
+			console.error('error: missing required argument "port"');
+			process.exit(1);
+		}
+		
 		commands.port[cmd](port).then(function(res){
 			if(cmd === 'list'){
 				require('../src/listFiles')({
@@ -55,17 +61,17 @@ program
 	.command('file <cmd> <filename> [destination]')
 	.description('Manage files. Valid <cmd>\'s:' +
 		'\n\tlist: Show a list all files in the board' +
-		'\n\tremove [filename]: Remove the file [filename] from the board' +
-		'\n\twrite [filename] [destination]: Write the local file [filename]' +
+		'\n\tremove <filename>: Remove the file <filename> from the board' +
+		'\n\twrite <filename> [destination]: Write the local file <filename>' +
 		'\n\t\tas [destination] in the board. If [destination] is not given' +
 		'\n\t\tfile will be have the same name.' +
 		//TODO: Rename to compress
-		'\n\tpush [filename] [destination]: Comress and write the local file' +
-		'\n\t\t[filename] as [destination] in the board.' +
+		'\n\tpush <filename> [destination]: Comress and write the local file' +
+		'\n\t\t<filename> as [destination] in the board.' +
 		'\n\t\tIt will check for the file\'s extension and use an appropiate compressor.' +
 		'\n\t\tSupported filetypes are: lua, html, js, and css.' +
-		'\n\tread [filename]: Read [filename] from the board and show in stdout.' +
-		'\n\texecute [filename]: Execute [filename] in the board using "dofile".\n'
+		'\n\tread <filename>: Read <filename> from the board and show in stdout.' +
+		'\n\texecute <filename>: Execute <filename> in the board using "dofile".\n'
 	)
 	.action(function(cmd, filename, destination, options){
 

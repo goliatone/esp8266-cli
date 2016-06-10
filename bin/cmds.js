@@ -147,8 +147,12 @@ var Commands = {
 			return Espytool(port, firmware, function(err, output){
 				//TODO: How do we handle feedback? pass in stedout, stderr?
 				if(err){
-					Commands.stderr('PYTHON ERROR:');
-					Commands.stderr(err);
+					if(!!(err.message || '').test(/Resource busy/)){
+						errorPortBusy();
+					} else {
+						Commands.stderr('PYTHON ERROR:');
+						Commands.stderr(err);
+					}
 				}
 				//Here we should emit progress event instead:
 				else Commands.stdout(output);
@@ -176,13 +180,17 @@ function DeviceCommand(cmd, args){
 				.then(comms.close.bind(comms));
 		}).on('error', function(err){
 			s.stop();
-			console.error();
-			console.error('Ensure your USB cable and board are connected');
-			console.error('and the port is not being used by another program.');
-			console.error();
+			errorPortBusy();
 			reject(err);
 		});
 	});
+}
+
+function errorPortBusy(){
+	console.error();
+	console.error('Ensure your USB cable and board are connected');
+	console.error('and the port is not being used by another program.');
+	console.error();
 }
 
 

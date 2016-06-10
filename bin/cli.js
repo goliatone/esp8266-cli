@@ -46,7 +46,7 @@ program
 			console.error('error: missing required argument "port"');
 			process.exit(1);
 		}
-		
+
 		commands.port[cmd](port).then(function(res){
 			if(cmd === 'list'){
 				require('../src/listFiles')({
@@ -58,7 +58,7 @@ program
 	});
 
 program
-	.command('file <cmd> <filename> [destination]')
+	.command('file <cmd> [filename] [destination]')
 	.description('Manage files. Valid <cmd>\'s:' +
 		'\n\tlist: Show a list all files in the board' +
 		'\n\tremove <filename>: Remove the file <filename> from the board' +
@@ -77,6 +77,11 @@ program
 
 		if(! commands.file.hasOwnProperty(cmd)){
 			unrecognizedCommand('Unrecognized command ' + cmd);
+		}
+
+		if(cmd.match(/remove|write|push|read|execute/) && !filename){
+			console.error('error: missing required argument "filename"');
+			process.exit(1);
 		}
 		//TODO should we take "write -c" option? compile?
 		//it would load the file, compile it and remove the lua?

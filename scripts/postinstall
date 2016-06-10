@@ -5,6 +5,7 @@ require('../bin/xterm');
 //require('child_process').execSync is a feature of node 0.12...
 //redo and lower node engine version
 //also check: spawn-sync [Prollyfill]
+var check = require('../src/checks');
 var execSync = require('child_process').execSync;
 
 var INSTALL_PYSERIAL_CMD = 'pip install pyserial';
@@ -53,8 +54,15 @@ module.exports = function(){
         }
     } else {
         console.info('Installation success √');
+        checkPortInstalled();
     }
 };
+
+function checkPortInstalled(){
+    //check if we have port, else notify set port!
+    check.oldPortIsSet();
+    check.portIsSet();
+}
 
 function checkPipInstalled(){
     try {

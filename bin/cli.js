@@ -2,6 +2,7 @@
 
 'use strict';
 
+require('./xterm');
 
 var program = require('commander'),
 	pkg = require('../package'),
@@ -200,17 +201,17 @@ function unrecognizedCommand(msg){
 
 process.on('SIGINT', function(){
 	if(!commands.PortManager.getSync());
-	console.log('\n*******************************************');
-	console.log('It appears that you forgot to set');
-	console.log('a port for esp.');
-	console.log('');
+	console.warn('\n*******************************************');
+	console.warn('It appears that you forgot to set');
+	console.warn('a port for esp.');
+	console.warn('');
 	console.log('You have to run "esp port list"');
 	console.log('and then "esp port set <port>"');
-	console.log('');
+	console.warn('');
 	console.log('On a Mac computer the command usually is:');
-	console.log('');
+	console.warn('');
 	console.log('esp port set /dev/cu.SLAB_USBtoUART');
-	console.log('');
-	console.log('*******************************************');
+	console.warn('');
+	console.warn('*******************************************');
 	process.exit()
 });

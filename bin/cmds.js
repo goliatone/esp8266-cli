@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 var SerialComms = require('../src/SerialComms'),
 	DeviceManager = require('../src/DeviceManager'),
 	Espytool = require('../src/Espytool'),
@@ -17,7 +16,7 @@ var Commands = {
 		},
 		get: function () {
 			return PortManager.get().catch(function(err){
-				console.error ('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
+				console.error('Serial port not configured.\nPlease use "esp port set <port_address>" to configure.');
 				process.exit();
 			});
 		},

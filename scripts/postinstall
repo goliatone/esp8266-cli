@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 'use strict';
+require('../bin/xterm');
 //require('child_process').execSync is a feature of node 0.12...
 //redo and lower node engine version
 //also check: spawn-sync [Prollyfill]
@@ -10,15 +11,66 @@ var INSTALL_PYSERIAL_CMD = 'pip install pyserial';
 var LIST_PACKAGES_CMD = 'python -c \'import pip; packages = pip.get_installed_distributions(); package_list = ["%s" % (i.key) for i in packages]; print(package_list)\'';
 
 module.exports = function(){
-    console.log('Checking dependencies for esptool.py');
 
-    var packages = JSON.parse(execSync(LIST_PACKAGES_CMD).replace(/\'/g, '\"'));
+    checkPipInstalled();
+
+    var output = '';
+    try {
+        output = execSync(LIST_PACKAGES_CMD);
+        output = output.toString();
+    } catch (e) {
+        console.error();
+        console.error('Error installing "node-esp"');
+        console.error();
+        console.error('The original error message:');
+        console.error();
+        console.error(e.message);
+        console.error();
+        process.exit(1);
+    }
+
+    console.log('Checking dependencies for esptool.py');
+    var packages = JSON.parse(output.replace(/\'/g, '\"'));
 
     if(!packages.indexOf('pyserial')) {
+        console.log();
         console.log('Dependency "pyserial" not found.');
+        console.log();
         console.log('Executing the command:');
-        console.log('$ ', INSTALL_PYSERIAL_CMD);
-        console.log('If the command fails, execute manually');
-        execSync(INSTALL_PYSERIAL_CMD);
+        console.log();
+        console.info('$ ', INSTALL_PYSERIAL_CMD);
+        console.log();
+        console.warn('If the command fails, execute manually');
+
+        try {
+            execSync(INSTALL_PYSERIAL_CMD);
+        } catch (e) {
+            console.error('An error occurred while installing "pyerial" dependency.');
+            console.log();
+            console.warn('Try to run the installation command manually from terminal.');
+            console.log();
+            console.info('  pip install pyserial');
+        }
+
     }
 };
+
+function checkPipInstalled(){
+    try {
+        execSync('which pip').toString();
+    } catch (e) {
+        console.log();
+        console.error('It looks like you dont have "pip" installed!');
+        console.log();
+        console.log('"pip" is the recommended tool for installing Python packages.');
+        console.log();
+        console.log('Try to intall "pip" manually and then retry installing the "node-esp" module.');
+        console.log();
+        console.info('  sudo easy_install pip');
+        console.log();
+        console.log('You can read more about "pip" here:');
+        console.log('https://pip.pypa.io/en/stable/');
+        console.log();
+        process.exit(1);
+    }
+}

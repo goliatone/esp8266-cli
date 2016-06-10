@@ -1,5 +1,5 @@
 var stdout = process.stdout;
-
+// https://github.com/medikoo/cli-color
 var info = console.info;
 var warn = console.warn;
 var error = console.error;

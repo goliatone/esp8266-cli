@@ -3,7 +3,7 @@
 var SerialComms = require('../src/SerialComms'),
 	DeviceManager = require('../src/DeviceManager'),
 	Espytool = require('../src/Espytool'),
-	PortManager = require('../src/PortManager')(getPortpath('.esp-port')),
+	PortManager = require('../src/PortManager')(getPortpath()),
 	fs = require('fs');
 
 var Commands = {
@@ -165,7 +165,7 @@ var Commands = {
 function DeviceCommand(cmd, args){
 	var Spinner = require('chalk-cli-spinner');
 
-	var s = Commands.pretty ? new Spinner() : {stop:function(){}};
+	var s = Commands.spinner = Commands.pretty ? new Spinner() : {stop:function(){}};
 
 	return new Promise(function(resolve, reject){
 		var port = PortManager.getSync();
@@ -200,6 +200,7 @@ module.exports.PortManager = PortManager;
 module.exports.getPortpath = getPortpath;
 
 function getPortpath(filepath){
+	filepath = filepath || '.esp-port';
 	var osHomedir = require('os-homedir');
 	return require('path').join(osHomedir(), filepath);
 }

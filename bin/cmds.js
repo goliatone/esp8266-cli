@@ -147,8 +147,10 @@ var Commands = {
 			return Espytool(port, firmware, function(err, output){
 				//TODO: How do we handle feedback? pass in stedout, stderr?
 				if(err){
-					if(!!(err.message || '').test(/Resource busy/)){
-						errorPortBusy();
+					if(err && err.message){
+						if(!!(err.message || '').test(/Resource busy/)){
+							errorPortBusy();
+						}
 					} else {
 						Commands.stderr('PYTHON ERROR:');
 						Commands.stderr(err);
